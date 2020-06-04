@@ -1,5 +1,7 @@
 # Color Extractor
 
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 This project is both a library and a CLI tool to extract the dominant colors of
 the main object of an image. Most of the preprocessing steps assume that the
 images are related to e-commerce, meaning that the objects targeted by the
@@ -14,25 +16,13 @@ precision will certainly be hindered.
 > however feel free to edit the code and use as you see fit.
 
 ## Installation
+![python 3.7 badge](https://img.shields.io/badge/python-v3.7-blue)
 
-The script and the library are currently targeting python 3 and won't work with
-python 2.
-
-Most of the dependencies can be installed using
+All of the dependencies can be installed using
 
 ```sh
 pip install -r requirements.txt
 ```
-
-Note that library and the CLI tool also depend on opencv 3.1.0 and its python 3
-bindings.
-For Linux users, the steps to install it are available
-[here](http://www.pyimagesearch.com/2015/07/20/install-opencv-3-0-and-python-3-4-on-ubuntu/).
-For OSX users, the steps to install it are available
-[here](http://www.pyimagesearch.com/2015/06/29/install-opencv-3-0-and-python-3-4-on-osx/).
-
-You then just have to ensure that this repository root is present in your
-`PYTHONPATH`.
 
 ## Color tagging
 
@@ -65,16 +55,27 @@ Those processings are (in order):
 The library can be used as simply as this:
 
 ```python
-import cv2
+from PIL import Image
 import numpy as np
 
 from color_extractor import ImageToColor
 
 npz = np.load('color_names.npz')
-img_to_color = ImageToColor(npz['samples'], npz['labels'])
+# see docs below
+settings = {
+    'debug': {},
+    'resize':{'crop': 1},
+    'back':{},
+    'skin': {'skin_type': 'general'},
+    'cluster':{'min_k': 2, 'max_k': 7},
+    'selector':{'strategy': 'ratio', 'ratio.threshold': 0.75},
+    'name':{}
+}
+img_to_color = ImageToColor(npz['samples'], npz['labels'], settings)
 
-img = cv2.imread('image.jpg')
-print(img_to_color.get(img))
+img = Image.open('path/to/your/image.jpg')
+img_arr_rgb = np.array(img)
+print(img_to_color.get(img_arr_rgb))
 ```
 
 The CLI tool as simply as this:
