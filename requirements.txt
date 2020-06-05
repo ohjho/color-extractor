@@ -8,11 +8,14 @@ networkx>=2.0
 numpy>=1.11.1
 Pillow>=4.3.0
 pyparsing==2.1.5
-python-dateutil==2.5.3
-pytz==2016.6.1
+python-dateutil>=2.6.1
+pytz>=2017.2
 scikit-image>=0.12.3
 scikit-learn>=0.17.1
 scipy>=0.17.1
 six==1.11.0
 toolz>=0.8.0
+tqdm>=4.46.1
+webcolors>=1.11.1
+streamlit>=0.60.0
 notebook>=6.0.3
