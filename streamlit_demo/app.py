@@ -36,13 +36,14 @@ def get_extractor(rbg_arr, name_arr, settings = {'debug': {}}):
 
 def Main():
 	app_desc = '''
-	this app: calls kikz's `handler.Main`:\n
-	1. Get all `bibs_found_id` for `SHOES` entities for the given event
-	2. call kikz's `handler.Main` on each `bibs_found_id`
+	fashion color detection without deep learning \n
+	* [docs on extractor's settings](https://github.com/ohjho/color-extractor#passing-settings)
+	* [xkcd color space](https://xkcd.com/color/rgb/)
+	* [webcolors' color space](https://webcolors.readthedocs.io/en/1.11.1/colors.html)
 	'''
 	show_miro_logo()
 	st.sidebar.header('color_extractor demo')
-	#st.sidebar.markdown(app_desc)
+	st.sidebar.markdown(app_desc)
 
 	# user input
 	default_settings = {
