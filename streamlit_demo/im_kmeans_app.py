@@ -23,7 +23,7 @@ def Main():
 	#st.sidebar.markdown(app_desc)
 
 	# user input
-	default_settings = {'normalize': True, 'max_iter': 5000, 'min_iter': 50}
+	default_settings = {'normalize': True, 'max_iter': 5000, 'min_iter': 10}
 	settings_dict = json.loads(
  		st.sidebar.text_area('kmeans settings', value = json.dumps(default_settings))
  	)
@@ -43,7 +43,7 @@ def Main():
 			centroids = [v['rbg'] for k, v in result['color'].items() ]
 			cnames = [v['name'] for k, v in result['color'].items() ]
 			l_caption = [ f'{c}: {"{:.0f}".format(p*100)}%'for c, p in zip(cnames, hist)]
-			
+
 			plot = plot_colors(np.array(hist), np.array(centroids))
 			st.write('#### result')
 			st.image(plot, f'color found {l_caption}', use_column_width = True)
