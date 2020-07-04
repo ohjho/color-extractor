@@ -27,9 +27,10 @@ def Main():
 	settings_dict = json.loads(
  		st.sidebar.text_area('kmeans settings', value = json.dumps(default_settings))
  	)
-	im = get_image(st_asset = st.sidebar, as_np_arr = True)
+	default_url = 'https://raw.githubusercontent.com/ohjho/color-extractor/kmeans/sample_image/waveoffkanagawa.jpg'
+	im = get_image(st_asset = st.sidebar, as_np_arr = True, default_url = default_url)
 	num_clusters = st.sidebar.number_input('number of clusters', min_value = 1, max_value = 10, value = 3)
-	use_fast_kmeans = st.sidebar.checkbox('use fast kmeans (sklearn.cluster.MiniBatchKMeans)')
+	use_fast_kmeans = st.sidebar.checkbox('use fast kmeans (sklearn.cluster.MiniBatchKMeans)', value = True)
 	color_name_space = st.sidebar.selectbox('color name space', options = ['xkcd', 'css2'])
 
 	if type(im) == np.ndarray:

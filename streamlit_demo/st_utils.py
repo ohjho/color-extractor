@@ -28,8 +28,9 @@ def file_selector(folder_path='.', st_asset = st, extension_tuple = None,
 		selected_filename = st_asset.selectbox(str_msg, sorted(filenames))
 		return os.path.join(folder_path, selected_filename)
 
-def get_image(st_asset = st.sidebar, as_np_arr = False, extension_list = ['jpg', 'jpeg', 'png']):
-	image_url = st_asset.text_input("Enter Image URL")
+def get_image(st_asset = st.sidebar, as_np_arr = False, extension_list = ['jpg', 'jpeg', 'png'],
+				default_url = None):
+	image_url = st_asset.text_input("Enter Image URL", value = default_url)
 	image_fh = st_asset.file_uploader(label = "Update your image", type = extension_list)
 
 	if image_url and image_fh:
