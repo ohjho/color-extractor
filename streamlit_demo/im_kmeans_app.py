@@ -29,10 +29,11 @@ def Main():
  	)
 	im = get_image(st_asset = st.sidebar, as_np_arr = True)
 	num_clusters = st.sidebar.number_input('number of clusters', min_value = 1, max_value = 10, value = 3)
+	use_fast_kmeans = st.sidebar.checkbox('use fast kmeans (sklearn.cluster.MiniBatchKMeans)')
 	color_name_space = st.sidebar.selectbox('color name space', options = ['xkcd', 'css2'])
 
 	if type(im) == np.ndarray:
-		result = im_kmeans(im, k = num_clusters, get_json = True, verbose = False,
+		result = im_kmeans(im, k = num_clusters, get_json = True, verbose = False, fast_kmeans = use_fast_kmeans,
 						kmeans_kargs = settings_dict, color_name_space = color_name_space
 						)
 		if result:

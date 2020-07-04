@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 import urllib.request as urllib
 from tqdm import tqdm
+from sklearn.cluster import MiniBatchKMeans
 
 def get_im(im, verbose = False):
     '''
@@ -171,12 +172,12 @@ def closest_colour(rgb_tuple, hex_name_map_dict = webcolors.CSS2_HEX_TO_NAMES):
 	index_of_smallest = np.argmin(distances)
 	return list(hex_name_map_dict.values())[index_of_smallest]
 
-def im_kmeans(im, k = 3, get_json = False, verbose = False,
+def im_kmeans(im, k = 3, get_json = False, verbose = False, fast_kmeans = True,
                 kmeans_kargs = {'normalize': True}, color_name_space = 'css2'):
     '''
     return centers and pct match for each for the given image
     Args:
-        max_retry: if kmeans fails , rerun
+        fast_kmeans: if true use sklearn's MiniBatchKMeans
     '''
     im = get_im(im, verbose = verbose)
     im_small = resize_im(im)
@@ -190,7 +191,16 @@ def im_kmeans(im, k = 3, get_json = False, verbose = False,
         has_alpha = True
         im_data = remove_alpha(im_data, verbose = verbose)
 
-    labels, centroids = kmeans(im_data, k = k, verbose = verbose, **kmeans_kargs)
+    if fast_kmeans:
+        clusters = MiniBatchKMeans(n_clusters = k, batch_size = 100, max_iter = 100,
+                        compute_labels = True
+                        )
+        clusters.fit(im_data)
+        labels = np.array(clusters.labels_)
+        centroids = np.array(clusters.cluster_centers_)
+    else:
+        labels, centroids = kmeans(im_data, k = k, verbose = verbose, **kmeans_kargs)
+
     if type(labels) != np.ndarray and type(centroids) != np.ndarray:
         if get_json:
             return None
@@ -225,7 +235,8 @@ def im_kmeans(im, k = 3, get_json = False, verbose = False,
                 'k': k,
                 'color_space': color_name_space,
                 'kmeans_kargs': kmeans_kargs,
-                'compute_time': "{:.2f}".format(time.time() - s_time) + 's'
+                'compute_time': "{:.2f}".format(time.time() - s_time) + 's',
+                'algo': 'sklearn.cluster.MiniBatchKMeans' if fast_kmeans else 'kmeans'
             }
         }
         return out_json
