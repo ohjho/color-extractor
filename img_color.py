@@ -219,7 +219,7 @@ def im_kmeans(im, k = 3, get_json = False, verbose = False, fast_kmeans = True,
 
         color_data = {
             i : {
-                'rbg': list(h_rbg[1]),
+                'rgb': list(h_rbg[1]),
                 'hsv': list(colorsys.rgb_to_hsv(
                     h_rbg[1][0]/255, h_rbg[1][1]/255, h_rbg[1][2]/255
                     )),
