@@ -39,9 +39,9 @@ def Main():
 			st.success(f'Color found. Has Alpha: `{result["meta"]["has_alpha"]}`')
 			st.json(result)
 
-			hist = [v['percentage'] for k, v in result['color'].items() ]
-			centroids = [v['rbg'] for k, v in result['color'].items() ]
-			cnames = [v['name'] for k, v in result['color'].items() ]
+			hist = [v['percentage'] for k, v in result['centroids'].items() ]
+			centroids = [v['rbg'] for k, v in result['centroids'].items() ]
+			cnames = [v['name'] for k, v in result['centroids'].items() ]
 			l_caption = [ f'{c}: {"{:.0f}".format(p*100)}%'for c, p in zip(cnames, hist)]
 
 			plot = plot_colors(np.array(hist), np.array(centroids))

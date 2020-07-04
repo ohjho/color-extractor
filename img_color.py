@@ -1,4 +1,4 @@
-import os, io, validators, colorsys, webcolors, warnings
+import os, io, validators, colorsys, webcolors, warnings, time
 import numpy as np
 from PIL import Image, ImageDraw
 import urllib.request as urllib
@@ -122,7 +122,7 @@ def find_histogram(labels, centers, bDict = False):
     else:
         return hist
 
-def plot_colors(hist, centroids):
+def plot_colors(hist, centroids, w= 300 , h = 50):
     # initialize the bar chart representing the relative frequency of each of the colors
     bar = np.zeros((50, 300, 3), dtype = "uint8")
     startX = 0
@@ -141,6 +141,7 @@ def plot_colors(hist, centroids):
         startX = endX
 
     # return the bar chart
+    im.resize( (w,h))
     return im
 
 def get_xkcd_color(url = 'http://xkcd.com/color/rgb.txt'):
@@ -183,6 +184,7 @@ def im_kmeans(im, k = 3, get_json = False, verbose = False,
     h , w, c = im_arr.shape
     im_data = im_arr.reshape((h * w, c))
     has_alpha = False
+    s_time = time.time()
 
     if c == 4:
         has_alpha = True
@@ -217,8 +219,14 @@ def im_kmeans(im, k = 3, get_json = False, verbose = False,
             for i, h_rbg in enumerate(sorted(zip(hist, centroids), reverse = True))
         }
         out_json = {
-            'color': color_data,
-            'meta': {'has_alpha': has_alpha}
+            'centroids': color_data,
+            'meta': {
+                'has_alpha': has_alpha,
+                'k': k,
+                'color_space': color_name_space,
+                'kmeans_kargs': kmeans_kargs,
+                'compute_time': "{:.2f}".format(time.time() - s_time) + 's'
+            }
         }
         return out_json
     else:
